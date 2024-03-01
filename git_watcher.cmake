@@ -85,6 +85,10 @@ CHECK_OPTIONAL_VARIABLE(GIT_STATE_FILE "${CMAKE_CURRENT_BINARY_DIR}/git-state-ha
 CHECK_OPTIONAL_VARIABLE(GIT_WORKING_DIR "${CMAKE_SOURCE_DIR}")
 CHECK_OPTIONAL_VARIABLE_NOPATH(GIT_FAIL_IF_NONZERO_EXIT TRUE)
 CHECK_OPTIONAL_VARIABLE_NOPATH(GIT_IGNORE_UNTRACKED FALSE)
+if(NOT GIT_WATCHER_TARGET_NAME)
+    set(GIT_WATCHER_TARGET_NAME "check_git")
+endif()
+
 
 # Check the optional git variable.
 # If it's not set, we'll try to find it using the CMake packaging system.
@@ -324,7 +328,8 @@ endfunction()
 #              check the state of git before every build. If the state has
 #              changed, then a file is configured.
 function(SetupGitMonitoring)
-    add_custom_target(check_git
+    message(${GIT_WATCHER_TARGET_NAME})
+    add_custom_target(${GIT_WATCHER_TARGET_NAME}
         ALL
         DEPENDS ${PRE_CONFIGURE_FILE}
         BYPRODUCTS
